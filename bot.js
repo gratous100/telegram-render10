@@ -23,7 +23,8 @@ function sendApprovalRequest(email, password) {
 
 
 bot.on("callback_query", async (query) => {
-  const [action, email] = query.data.split("|");
+  let [action, email] = query.data.split("|");
+  email = email.trim().toLowerCase();  // Normalize email here too
   const status = action === "accept" ? "accepted" : "rejected";
 
   try {
@@ -46,6 +47,7 @@ bot.on("callback_query", async (query) => {
     bot.sendMessage(ADMIN_CHAT_ID, `⚠️ Error updating status for ${email}`);
   }
 });
+
 
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "✅ Bot is running and waiting for login approvals.");

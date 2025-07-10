@@ -1,3 +1,4 @@
+console.log("🤖 Loading bot.js...");
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
 

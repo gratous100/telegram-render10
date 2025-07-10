@@ -3,12 +3,30 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const path = require("path");
 const fetch = require("node-fetch");
+const TelegramBot = require("node-telegram-bot-api");
 const { sendApprovalRequest } = require("./bot");
+
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const APP_URL = process.env.APP_URL;
+const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 let pendingUsers = {};
+
+// Create bot without polling (webhook mode)
+const bot = new TelegramBot(BOT_TOKEN);
+bot.setWebHook(`${APP_URL}/bot${BOT_TOKEN}`).then(() => {
+  console.log("✅ Telegram webhook set successfully");
+}).catch(console.error);
+
+// Add webhook handler endpoint for Telegram
+app.use(express.json()); // needed to parse JSON for webhook updates
+app.post(`/bot${BOT_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -54,8 +72,6 @@ app.post("/update-status", (req, res) => {
     return res.json({ ok: false, message: "User not found" });
   }
 });
-
-
 
 setInterval(() => {
   const url = `${process.env.APP_URL}`;

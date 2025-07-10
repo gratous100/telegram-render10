@@ -5,8 +5,7 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID;
 const APP_URL = process.env.APP_URL;
 
-const bot = new TelegramBot(BOT_TOKEN, { polling: true });
-
+const bot = new TelegramBot(BOT_TOKEN);
 function sendApprovalRequest(email, password) {
   const options = {
     reply_markup: {

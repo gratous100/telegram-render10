@@ -60,11 +60,13 @@ app.post("/update-status", (req, res) => {
   }
 });
 
-// Ping self to keep alive (Render)
+// Ping self every 30 seconds to stay awake
 setInterval(() => {
   const url = `${process.env.APP_URL}`;
-  fetch(url).then(() => console.log("🔁 Pinged self to stay awake"));
-}, 5 * 60 * 1000);
+  fetch(url)
+    .then(() => console.log("🔁 Pinged self to stay awake"))
+    .catch(err => console.error("⚠️ Ping failed:", err));
+}, 30 * 1000); // 30 seconds
 
 // Start server
 app.listen(PORT, () => {

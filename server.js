@@ -1,4 +1,10 @@
 console.log("📦 Starting server.js...");
+
+if (process.env.BREAK_APP === 'true') {
+  console.log("⛔ Service is paused via BREAK_APP. Exiting...");
+  process.exit(1);
+}
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");

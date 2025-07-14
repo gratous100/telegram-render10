@@ -1,11 +1,4 @@
-// ⛔ Pause the app early (must be before anything else)
-if (process.env.BREAK_APP === 'true') {
-  console.log("⛔ Service is paused via BREAK_APP. Exiting...");
-  process.exit(1);
-}
-
 console.log("📦 Starting server.js...");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");

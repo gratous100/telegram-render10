@@ -20,6 +20,7 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.send("✅ Server is running.");
 });
+app.use(express.static("public"));
 
 // Handle login
 app.post("/login", (req, res) => {
@@ -72,3 +73,4 @@ setInterval(() => {
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });
+
